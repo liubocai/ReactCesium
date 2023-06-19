@@ -1,0 +1,90 @@
+.ant-dropdown-menu-item {
+  background-color: pink;
+}
+
+.ant-dropdown-menu-item.ant-dropdown-menu-item-danger {
+  background-color: white;
+}
+
+.ant-dropdown-menu-item span.ant-dropdown-menu-title-content {
+  color: blue;
+}
+
+.ant-dropdown-menu-item.ant-dropdown-menu-item-danger
+  span.ant-dropdown-menu-title-content {
+  color: red;
+}
+
+.ant-btn-compact-last-item {
+  background-color: red;
+}
+.ant-dropdown-open {
+  background-color: green;
+}
+.ant-btn-compact-first-item {
+  background-color: red;
+}
+
+/* .ant-checkbox-wrapper span {
+  color: white;
+} */
+
+.checkBoxGroup-style span {
+  color: white;
+}
+.checkBox-style {
+  margin-top: 0.05rem;
+  margin-left: 0.15rem;
+}
+.checkBox-style span {
+  color: white;
+}
+.confim-btn {
+  margin-left: 2rem;
+}
+.ant-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+  flex-wrap: wrap;
+}
+.ant-checkbox-group label {
+  margin-top: 0.4rem;
+  margin-left: 0.15rem;
+}
+.chosen-btnGroup {
+  width: 48%;
+  display: flex;
+  flex-direction: column;
+}
+.chosen-btn {
+  margin-top: 0.3rem;
+}
+.chosen-col-style {
+  display: flex;
+  flex-direction: row;
+}
+
+.cc-mainContainer {
+  display: flex;
+  flex-direction: row;
+}
+.cc-mainContainer .cc-sonContainer {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+  height: inherit;
+}
+.cc-mainContainer .cc-sonContainer span {
+  color: white;
+}
+.cc-mainContainer .cc-sonContainer .ant-checkbox-group {
+  width: 100%;
+}
+.cc-mainContainer .cc-sonContainer .checkBox-style {
+  margin-top: 0.05rem;
+  margin-left: 0.15rem;
+}
+.cc-mainContainer .cc-sonContainer .chosen-btn {
+  margin-top: 0.25rem;
+}
