@@ -583,7 +583,7 @@ module.exports = function (webpackEnv) {
           { from: path.join('node_modules/cesium/Source', cesiumWorkers), to: 'Workers' },
           { from: path.join('node_modules/cesium/Source', 'Assets'), to: 'Assets' },
           { from: path.join('node_modules/cesium/Source', 'Widgets'), to: 'Widgets' },
-          { from: path.join(fileFolder, ''), to: 'data' }
+          
         ]
       }),
       new webpack.DefinePlugin({
@@ -637,7 +637,7 @@ module.exports = function (webpackEnv) {
       // It is absolutely essential that NODE_ENV is set to production
       // during a production build.
       // Otherwise React will be compiled in the very slow development mode.
-      new webpack.DefinePlugin(env.stringified),
+      // new webpack.DefinePlugin(env.stringified),
       // Experimental hot reloading for React .
       // https://github.com/facebook/react/tree/main/packages/react-refresh
       isEnvDevelopment &&
