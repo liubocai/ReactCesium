@@ -10,6 +10,7 @@ import RightPart from './components/RightPart/index'
 import './assets/icon/iconfont.css'
 class App extends Component {
   state = {
+    csapi: 'http://localhost:8088',
     selectAera: false,
     showUavTrack: false,
     cameraNow: {
@@ -22,7 +23,25 @@ class App extends Component {
       pos:[114,32],
       utext:'无人机设备1',
     },
-    videourl:'this is app.js',    
+    videourl:'this is app.js',   
+
+    texturl:0,
+    imageurl:'this is app.js',
+    entid:1,
+    addIconMes:{
+      ifadd: false,
+      uid: '1',
+      upos:[114,32],
+      utext:'无人机设备',
+      umodel:'uav.glb'
+    },
+    //for right page
+    rrtcplayfunc:{
+      ifrun:false,
+      vdomid:'rtc_media_player',
+      url:'http://192.168.10.182:8080/',
+      text:'',
+    },
     video1:{
       url:'应急人员.png',
       text:''
@@ -35,16 +54,17 @@ class App extends Component {
       url:'应急人员.png',
       text:''
     },
-    texturl:0,
-    imageurl:'this is app.js',
-    entid:1,
-    addIconMes:{
-      ifadd: false,
-      uid: '1',
-      upos:[114,32],
-      utext:'无人机设备',
-      umodel:'uav.glb'
-    }
+  }
+  //for right page
+  changerrtcplayfunc=(ifrun, vdomid, url,text)=>{
+    this.setState({
+      rrtcplayfunc:{
+        ifrun:ifrun,
+        vdomid:vdomid,
+        url:url,
+        text:text,
+      }
+    })
   }
   changevidu1=(url,text)=>{
     this.setState({
@@ -167,6 +187,9 @@ class App extends Component {
             changevidu3={this.changevidu3}
             selectAera={this.state.selectAera}
             showUavTrack={this.state.showUavTrack}
+            csapi={this.state.csapi}
+            changerrtcplayfunc={this.changerrtcplayfunc}
+            
           />
 
           <CenterPart
@@ -185,7 +208,7 @@ class App extends Component {
             showUavTrack={this.state.showUavTrack}
             uavmodel={this.state.uavmodel}
             addIconMes={this.state.addIconMes}
-
+            csapi={this.state.csapi}
           />
 
           <RightPart
@@ -199,7 +222,9 @@ class App extends Component {
           video1={this.state.video1}
           video2={this.state.video2}
           video3={this.state.video3}
-
+          rrtcplayfunc={this.state.rrtcplayfunc}
+          changerrtcplayfunc={this.changerrtcplayfunc}
+          csapi={this.state.csapi}
           />
 
 

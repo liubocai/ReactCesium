@@ -140,8 +140,8 @@ const data = [
 ]
 const imgurls = 
   [
-    ['http://192.168.1.100:8080/?action=stream','http://192.168.1.100:8081/?action=stream'],
-    ['http://192.168.1.100:8080/?action=stream','http://192.168.1.100:8080/?action=stream'],
+    ['http://192.168.1.101:8080/?action=stream','http://192.168.1.100:8081/?action=stream'],
+    ['http://192.168.1.102:8080/?action=stream','http://192.168.1.100:8080/?action=stream'],
     ['http://192.168.1.100:8080/?action=stream','http://192.168.1.100:8080/?action=stream'],
     ['http://192.168.1.100:8080/?action=stream','http://192.168.1.100:8081/?action=stream'],
     ['http://192.168.1.100:8080/?action=stream','http://192.168.1.100:8081/?action=stream'],
@@ -158,5 +158,24 @@ const imgurls =
     ['http://192.168.1.100:8080/?action=stream','http://192.168.1.100:8081/?action=stream'],
   ]
 
+//这里的imgurls是实现点击模型实体，在右边显示视频功能的
 
-export { data, imgurls }
+const gpsurls = [
+  'http://192.168.1.101:8000',
+  'http://192.168.1.101:8000',
+  'http://192.168.1.101:8000',
+  'http://192.168.1.102:8000',
+  'http://192.168.1.102:8000',
+  'http://192.168.1.102:8000',
+  'http://192.168.1.101:8000',
+  'http://192.168.1.101:8000',
+  'http://192.168.1.101:8000',
+  'http://192.168.1.102:8000',
+  'http://192.168.1.102:8000',
+]
+
+const testpos = [
+  [114.36,35.30],
+  [114.00,35.00],
+]
+export { data, imgurls, gpsurls, testpos }

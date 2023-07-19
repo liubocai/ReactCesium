@@ -4,7 +4,7 @@ import { RightCenterBox,RightPage } from '../RightPart/style'
 import { message, Tag } from 'antd'
 import { BorderBox1 } from '@jiaminghi/data-view-react'
 import './cesium.css'
-import { data, imgurls } from './data'
+import { data, imgurls, gpsurls, testpos } from './data'
 import * as Cesium from "cesium/Cesium"
 import * as widget from 'cesium/Widgets/widgets.css'
 import {dUserSitua, dUserLocation} from '../LeftPart/data'
@@ -17,6 +17,7 @@ class index extends PureComponent {
   state = {
     url: '005.mp4',
     gpspos:[114,32],
+    addedEnt:[0,1,3],
   }
   constructor() {
     super()
@@ -47,11 +48,11 @@ class index extends PureComponent {
       this.props.changeUavTrack(false)
     }
     if (this.props.addIconMes.ifadd){
+      // this.state.addedEnt.push(this.props.addIconMes.uid)
       console.log("addIconMes:",this.props.addIconMes)
       this.addIcon(this.props.addIconMes.uid, this.props.addIconMes.upos, this.props.addIconMes.utext, this.props.addIconMes.umodel)
-      this.interval = setInterval(()=>this.moveEnt(this.props.addIconMes.uid),5000)
-      //this.props.changeIconMes('0',[0,0],'0','0',false)
-      
+      setInterval(()=>this.moveEnt(),5000)
+      //this.props.changeIconMes('0',[0,0],'0','0',false)      
     }
 
   }
@@ -60,7 +61,7 @@ class index extends PureComponent {
     // var wgs84 = new GeographicTilingScheme({ellipsoid: Ellipsoid.WGS84})
 
     let tileset = new Cesium.Cesium3DTileset({
-      url: 'http://localhost:3000/3DTiles/WHUXXXB/tileset.json', // 相对路径
+      url: this.$config.tilesurl1, // 相对路径
       baseScreenSpaceError: 1024,
       //【重要】数值加大，能让最终成像变模糊
       // ScreenSpaceErrorFactor: 8,
@@ -79,10 +80,13 @@ class index extends PureComponent {
       // maximumScreenSpaceError: 2,//最大的屏幕空间误差
       // maximumNumberOfLoadedTiles: 100000, //最大加载瓦片个数
     })
+    console.log('this.$config.tilesurl1',this.$config.tilesurl1)
+    console.log('this.$config.tilesurl2',this.$config.tilesurl2)
 
 
     let tileset0 = new Cesium.Cesium3DTileset({
-      url: 'http://localhost:3000/3DTiles/WHUWLXB/tileset.json', // 相对路径
+      url: this.$config.tilesurl2, // 相对路径
+      // url: this.$config.tilesurl1,
       baseScreenSpaceError: 1024,
       //【重要】数值加大，能让最终成像变模糊
       // ScreenSpaceErrorFactor: 8,
@@ -130,7 +134,7 @@ class index extends PureComponent {
       //离线瓦片地图加载
       // imageryProvider: new Cesium.UrlTemplateImageryProvider({ TileMapServiceImageryProvider
       // imageryProvider: new Cesium.UrlTemplateImageryProvider({
-      //   url:'http://localhost:3000/whu/tiles/{z}/{x}/{reverseY}.png',
+      //   url:'http://localhost:8082/whu/tiles/{z}/{x}/{reverseY}.png',
       //   // url:'http://localhost:3000/tiles',
       //   // fileExtension: 'png',
       //   // url:'http://127.0.0.1:8082/tiles',
@@ -138,20 +142,44 @@ class index extends PureComponent {
       //   // tilingScheme: new Cesium.GeographicTilingScheme({ellipsoid: Cesium.Ellipsoid.WGS84}),
       //   rectangle: Cesium.Rectangle.fromDegrees(-180,-90,180,90),
       // }),
-
-
     })
-    //添加3d模型
-    viewer.scene.primitives.add(tileset)
-    viewer.scene.primitives.add(tileset0)
-    viewer.flyTo(tileset)
     // 这两项是将viewer背景置为透明，可视化效果更好看
     viewer.scene.skyBox.show = false
     viewer.scene.backgroundColor = new Cesium.Color(0.0, 0.0, 0.0, 0.0)
     // 去除下段版权信息
     viewer.cesiumWidget.creditContainer.style.display = "none"
+    //添加3d模型
+    viewer.scene.primitives.add(tileset)
+    viewer.scene.primitives.add(tileset0)
+    viewer.flyTo(tileset)
+    //测试汽车移动 ok并且能够循环 https://blog.csdn.net/weixin_45782925/article/details/123430335
+    // var startPosition = new Cesium.Cartesian3.fromDegrees(114.35090337586192, 30.53613887992898, 15)
+    // var endPosition   = new Cesium.Cartesian3.fromDegrees(114.35040065788635, 30.53936009794829, 15)
+    // var factor = 0
+    // const position = new Cesium.SampledPositionProperty();
+    // const vehicleEntity = viewer.entities.add({
+    //   position: new Cesium.CallbackProperty(function() {
+    //       if (factor > 5000) {
+    //           factor = 0;
+    //       }
+    //       factor++;
+    //       // 动态更新位置
+    //       return Cesium.Cartesian3.lerp(startPosition, endPosition, factor / 5000.0, new Cesium.Cartesian3());
+    //   }, false),
+    //   model: {
+    //       uri: "WorkerMan.glb",
+    //       scale: 0.001,
+    //   },
+    // }); 
+    // viewer.trackedEntity = vehicleEntity;
+    var carEntity;  //定义车辆Entity
+    var property = new Cesium.SampledPositionProperty();
+    property.setInterpolationOptions({  //设置插值算法,具体看官方文档
+      interpolationDegree: 1,
+      interpolationAlgorithm: Cesium.LinearApproximation,
+    });
+   
 
-    // this.interval = setInterval(() => this.moveEnt('1'), 5000)
 
     this.cameraAdj = (longi, lati, height, dura) => {
       viewer.camera.flyTo({
@@ -306,7 +334,7 @@ class index extends PureComponent {
       var pitch = 0
       var roll = 0
       var hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll)
-      var positions = Cesium.Cartesian3.fromDegrees(pos[0]-46.07612763, pos[1]-11.83213476, 150.0)
+      var positions = Cesium.Cartesian3.fromDegrees(pos[0], pos[1], 13.0)
       var orientation = Cesium.Transforms.headingPitchRollQuaternion(positions, hpr)
       viewer.entities.add({
         name: 'anyway',
@@ -323,24 +351,46 @@ class index extends PureComponent {
         },
         model: {
           uri: url,
-          scale: 0.5,
+          scale: 0.001,
         }
       })
     }
 
-    this.moveEnt = (uid)=>{
+    this.moveEnt = ()=>{
       //根据实体uid实时获取实体的gps位置，当实体创建时就自动运行
-      console.log("uid",uid)
-      var tent = viewer.entities.getById(uid)
-      if(tent == null){
-        console.log("未找到实体")
-        return
+      // console.log("uid",uid)
+
+      for(var i=0, len=this.state.addedEnt.length; i<len; i++){
+        var uid = this.state.addedEnt[i]
+        axios.get(gpsurls[uid]).then(response =>{
+          var tent = viewer.entities.getById(uid)
+          if(tent == null){
+            console.log("未找到实体", uid);
+          }
+          console.log("当前实体：",uid,"  坐标：",response.data)
+          tent.position = Cesium.Cartesian3.fromDegrees(response.data.lon,response.data.lat,32.0)
+        })
+        // console.log("当前实体：",uid,"  坐标：",testpos[uid])
+        // tent.position = Cesium.Cartesian3.fromDegrees(testpos[uid][0],testpos[uid][1],15.0)
       }
-      axios.get('/gpsapi')
-      .then(response => {
-        console.log(response.data)
-        tent.position = Cesium.Cartesian3.fromDegrees(response.data.lon,response.data.lat,150.0)
-    })
+      // axios.get(gpsurls[uid]).then(response =>{
+      //   console.log("当前实体：",uid,"  坐标：",response.data)
+      //   tent.position = Cesium.Cartesian3.fromDegrees(response.data.lon,response.data.lat,15.0)
+      // })
+
+      // if(uid ==0){
+      //   axios.get('http://192.168.1.101:8000')
+      //   .then(response => {
+      //     console.log("坐标：",response.data)
+      //     tent.position = Cesium.Cartesian3.fromDegrees(response.data.lon,response.data.lat,15.0)
+      //   })
+      // }else if(uid ==3){
+      //   axios.get('http://192.168.1.102:8000')
+      //     .then(response => {
+      //       console.log("坐标：",response.data)
+      //       tent.position = Cesium.Cartesian3.fromDegrees(response.data.lon,response.data.lat,15.0)
+      //     })
+      // }
     }
   
   }

@@ -15,13 +15,49 @@ import {
   RightBottomBox,
   ModuleTitle
 } from './style'
-// import { Button as AntdButt, Space } from 'antd';
+import Srs from '../../srs.sdk.js'
 
+// import { Button as AntdButt, Space } from 'antd';
+//不同组件中函数的调用都是通过在子组件内监听其在父组件内变量的变化
 class index extends PureComponent {
   state={
     front:'',
     back:'',
   }
+  componentDidUpdate(){
+    if(this.props.rrtcplayfunc.ifrun){
+      this.rtcplayfunc(this.props.rrtcplayfunc.vdomid, this.props.rrtcplayfunc.url);
+      this.props.changerrtcplayfunc(false, '','','');
+    }
+  }
+  rtcplayfunc(vdomid, url){
+    var sdk=null;
+    var vdom = document.getElementById(vdomid);
+    // vdom.show();  
+    // Close PC when user replay.
+    if (sdk) {
+        sdk.close();
+    }
+    sdk = new Srs.SrsRtcPlayerAsync();
+
+    // https://webrtc.org/getting-started/remote-streams
+    // vdom.prop('srcObject', sdk.stream);
+    // Optional callback, SDK will add track to stream.
+    // sdk.ontrack = function (event) { console.log('Got track', event); sdk.stream.addTrack(event.track); };
+
+    // For example: webrtc://r.ossrs.net/live/livestream
+    var url = url;
+    vdom.srcObject = sdk.stream;
+    sdk.play(url).then(function(session){
+    }).catch(function (reason) {
+        sdk.close();
+        vdom.hide();
+        console.error(reason);
+    });   
+
+  }
+
+
   render() {
     return (
       <RightPage>
@@ -42,8 +78,9 @@ class index extends PureComponent {
           <BorderBox1 className='right-center-borderBox1'>
 
             <div className='right-center-top'>
-              {/* <video src={this.props.videourl} width={350} height={240} autoPlay controls>请选择一个模型</video> */}
-              <img className='imgbox' src={this.props.video1.url}/>
+              <video className='imgbox' id="rtc_media_player1" controls autoplay></video>
+              {/* <video src={this.props.videourl} width={350} height={240} autoPlay controls>请选择一个模型</video> */}              
+              {/* <img className='imgbox' src={this.props.video1.url}/> */}
               <span className='title-dis'>{this.props.video1.text}</span>
             </div>
           </BorderBox1>
@@ -53,6 +90,7 @@ class index extends PureComponent {
           <BorderBox1 className='right-center-borderBox1'>
 
             <div className='right-center-top'>
+              <video className='imgbox' id="rtc_media_player2" controls autoplay></video>
               {/* <video src={this.props.videourl} width={350} height={240} autoPlay controls>请选择一个模型</video> */}
               <img className='imgbox' src={this.props.video2.url}/>
               <span className='title-dis'>{this.props.video2.text}</span>
@@ -62,8 +100,9 @@ class index extends PureComponent {
 
         <RightCenterBox>
           <BorderBox1 className='right-center-borderBox1'>
-
             <div className='right-center-top'>
+              <video className='imgbox' id="rtc_media_player3" controls autoplay></video>
+
               {/* <video src={this.props.videourl} width={350} height={240} autoPlay controls>请选择一个模型</video> */}
               <img className='imgbox' src={this.props.video3.url}/>
               <span className='title-dis'>{this.props.video3.text}</span>

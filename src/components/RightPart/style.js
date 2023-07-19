@@ -47,7 +47,7 @@ export const RightCenterBox = styled.div`
       background-color: rgba(19, 25, 47, 0.6);
       .imgbox{
         width: 4.43rem;
-        height: 350px;
+        height: 4rem;
         margin-right: 0.1875rem;
         margin-bottom: 0.19rem;
       }
