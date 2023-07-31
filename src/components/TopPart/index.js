@@ -13,7 +13,7 @@ class index extends PureComponent {
     super(props)
     this.state = {
       // '多模态大数据智能融合分析与精准推测软硬件一体化系统'
-      title: '消防演练系统',
+      title: '通信-导航-遥感一体化组网应急感知系统',
       timeStr: '',
       weekday: [
         '星期天',

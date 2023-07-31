@@ -73,7 +73,9 @@ class index extends PureComponent {
             </div>
           </div>
         </RightTopBox> */}
-
+        <div>
+          <button>更多</button>
+        </div>
         <RightCenterBox>
           <BorderBox1 className='right-center-borderBox1'>
 
@@ -92,7 +94,7 @@ class index extends PureComponent {
             <div className='right-center-top'>
               <video className='imgbox' id="rtc_media_player2" controls autoplay></video>
               {/* <video src={this.props.videourl} width={350} height={240} autoPlay controls>请选择一个模型</video> */}
-              <img className='imgbox' src={this.props.video2.url}/>
+              
               <span className='title-dis'>{this.props.video2.text}</span>
             </div>
           </BorderBox1>
@@ -104,7 +106,7 @@ class index extends PureComponent {
               <video className='imgbox' id="rtc_media_player3" controls autoplay></video>
 
               {/* <video src={this.props.videourl} width={350} height={240} autoPlay controls>请选择一个模型</video> */}
-              <img className='imgbox' src={this.props.video3.url}/>
+              
               <span className='title-dis'>{this.props.video3.text}</span>
             </div>
           </BorderBox1>

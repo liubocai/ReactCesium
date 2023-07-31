@@ -9,6 +9,7 @@ import * as Cesium from "cesium/Cesium"
 import * as widget from 'cesium/Widgets/widgets.css'
 import {dUserSitua, dUserLocation} from '../LeftPart/data'
 import axios from 'axios'
+import { async } from '@jiaminghi/data-view-react/lib/index-cd27b7f6'
 
 Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1YmRiNTk5OS05MTllLTQ3ZDYtYTcyMS0zYjRhNzBjZDM3N2MiLCJpZCI6MTI5NTEzLCJpYXQiOjE2NzkzMjYyMTR9.ra6JrNYCDF8wkMtmm_yWBVqh-mUDcfYwc2hkQ7-W3BI"
 
@@ -17,7 +18,7 @@ class index extends PureComponent {
   state = {
     url: '005.mp4',
     gpspos:[114,32],
-    addedEnt:[0,1,3],
+    addedEnt:[0],
   }
   constructor() {
     super()
@@ -368,7 +369,7 @@ class index extends PureComponent {
             console.log("未找到实体", uid);
           }
           console.log("当前实体：",uid,"  坐标：",response.data)
-          tent.position = Cesium.Cartesian3.fromDegrees(response.data.lon,response.data.lat,32.0)
+          tent.position = Cesium.Cartesian3.fromDegrees(response.data.lon,response.data.lat,32.0)          
         })
         // console.log("当前实体：",uid,"  坐标：",testpos[uid])
         // tent.position = Cesium.Cartesian3.fromDegrees(testpos[uid][0],testpos[uid][1],15.0)

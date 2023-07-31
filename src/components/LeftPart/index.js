@@ -51,7 +51,7 @@ class ChildComponent extends React.Component { // 静态组件不会在父组件
   }
   clickSbHandler = (e) => {
     var i = e.rowIndex;
-    var uid = e.rowIndex + ""
+    var uid = e.rowIndex+1 + ""
     var pos = dUserLocation[e.rowIndex]
     var text = this.props.configin.data[i][0]// var text = dUserSitua.data[e.rowIndex][0]
     var url = this.genVideoUrl(this.props.ips[i]);
