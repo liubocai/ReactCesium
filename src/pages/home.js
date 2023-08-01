@@ -1,14 +1,15 @@
-import React, { Component } from 'react'
-import { AppPageStyle, AppPageContent } from './AppStyle'
-import { Globalstyle } from "./global.js"
+import React, { Component, useReducer, useRef } from 'react'
+import { AppPageStyle, AppPageContent } from '../AppStyle'
+import { Globalstyle } from "../global.js"
 
-import TopPart from './components/TopPart/index'
-import LeftPart from './components/LeftPart/index'
-import CenterPart from './components/CenterPart/index'
-import RightPart from './components/RightPart/index'
+import TopPart from '../components/TopPart/index'
+import LeftPart from '../components/LeftPart/index'
+import CenterPart from '../components/CenterPart/index'
+import RightPart from '../components/RightPart/index'
 // import PlayPart from './components/PlayPart/index'
-import './assets/icon/iconfont.css'
-class App extends Component {
+
+import '../assets/icon/iconfont.css'
+class Home extends Component {
   state = {
     csapi: 'http://localhost:8088',
     selectAera: false,
@@ -234,4 +235,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default Home;
