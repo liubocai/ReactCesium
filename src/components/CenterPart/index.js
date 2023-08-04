@@ -31,6 +31,7 @@ class index extends PureComponent {
     this.addModel = null // 布设三维模型
     this.addIcon = null //添加图标
     this.timerForgps = null
+    this.timerForvid = null
   }
 
 
@@ -54,6 +55,9 @@ class index extends PureComponent {
       this.addIcon(this.props.addIconMes.uid, this.props.addIconMes.upos, this.props.addIconMes.utext, this.props.addIconMes.umodel)
       if (this.timerForgps == null){
         this.timerForgps = setInterval(()=>this.moveEnt(),5000)
+      }
+      if(this.timerForvid == null){
+        this.timerForvid = setInterval(()=>this.saveVid(), 5*60*1000) //每5分钟录一次
       }
       //this.props.changeIconMes('0',[0,0],'0','0',false)      
     }
@@ -418,7 +422,18 @@ class index extends PureComponent {
       //     })
       // }
     }
-  
+    this.saveVid = ()=>{
+      for(var j=0, len=this.props.addedEnt.length; j<len; j++){
+        var uidd = this.props.addedEnt[j];
+        var eidd = parseInt(uidd)+1;
+        console.log(uidd);
+        console.log("eidd");
+        var csurl = this.props.csapi + "/recordbycv?eid=" + eidd;
+        axios.get(csurl).then(response =>{
+          console.log("indeed",eidd)
+        })
+      }
+    }
   }
 
   getGPS = () =>{
