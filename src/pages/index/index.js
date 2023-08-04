@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './flexible'
 import App from './App'
-import reportWebVitals from './reportWebVitals'
+import reportWebVitals from '../../reportWebVitals'
 
 React.Component.prototype.$config = window.config
 const root = ReactDOM.createRoot(document.getElementById('root'))

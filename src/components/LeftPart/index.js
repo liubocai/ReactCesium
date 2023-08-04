@@ -19,6 +19,7 @@ var videoindex = 1;
 class ChildComponent extends React.Component { // 静态组件不会在父组件状态变化时重新渲染
   state = {
     videoindex : 1,
+    addedEnt: [],
   }
   shouldComponentUpdate (nextProps, nextState) {
     return false
@@ -47,18 +48,37 @@ class ChildComponent extends React.Component { // 静态组件不会在父组件
         });
   }
   genVideoUrl(ip){
-    return 'webrtc' + ip.substr(4) + '/live/livestream'
+    return 'webrtc://' + ip + '/live/livestream'
   }
   clickSbHandler = (e) => {
     var i = e.rowIndex;
-    var uid = e.rowIndex+1 + ""
-    var pos = dUserLocation[e.rowIndex]
-    var text = this.props.configin.data[i][0]// var text = dUserSitua.data[e.rowIndex][0]
-    var url = this.genVideoUrl(this.props.ips[i]);
-    this.props.changeCameraNow(dUserLocation[i][0], dUserLocation[i][1], true) //移动摄像头到新增图标
-    this.props.changeIconMes(uid, pos, text,'WorkerMan.glb',true) //增加图标
-    // this.props.changerrtcplayfunc(true,'rtc_media_player1','webrtc://192.168.10.182/live/livestream','');
-    this.showVideo(url,text) //在右边播放视频
+    var uid = e.rowIndex + ""
+    var tarray = this.state.addedEnt;
+    
+    if(tarray.includes(uid)){
+      //如果实体已经生成
+      tarray.splice(tarray.indexOf(uid))
+      this.setState({
+        addedEnt: tarray
+      })
+      //todo 添加消除实体等操作
+    }else{
+      //第一次生成实体
+      tarray.push(uid);
+      this.setState({
+        addedEnt: tarray
+      })
+      var pos = dUserLocation[e.rowIndex]
+      var text = this.props.configin.data[i][0]// var text = dUserSitua.data[e.rowIndex][0]
+      var url = this.genVideoUrl(this.props.ips[i]);
+      this.props.changeCameraNow(dUserLocation[i][0], dUserLocation[i][1], true) //移动摄像头到新增图标
+      this.props.changeIconMes(uid, pos, text,'WorkerMan.glb',true) //增加图标
+      // this.props.changerrtcplayfunc(true,'rtc_media_player1','webrtc://192.168.10.182/live/livestream','');
+      this.showVideo(url,text) //在右边播放视频
+    }
+    //把tarray传出去
+    this.props.changeAddedEnt(tarray);
+
   }
   
   render () {
@@ -106,8 +126,8 @@ class index extends React.Component {
       api: this.props.csapi,
       ips:ips,
     }
+    this.props.changeIps(ips);
   }
-  
 
   chSelect = () => {
     // console.log(this.props)
@@ -152,7 +172,8 @@ class index extends React.Component {
               changevidu1={this.props.changevidu1}
               changevidu2={this.props.changevidu2}
               changevidu3={this.props.changevidu3}
-              changerrtcplayfunc={this.props.changerrtcplayfunc} />
+              changerrtcplayfunc={this.props.changerrtcplayfunc}
+              changeAddedEnt={this.props.changeAddedEnt} />
             </div>
           </BorderBox13>
         </LeftBottomBox>

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import pageBg from './assets/images/pageBg.png'
+import pageBg from '../../assets/images/pageBg.png'
 
 // 12.25rem
 export const AppPageStyle = styled.div`

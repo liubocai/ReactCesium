@@ -18,7 +18,7 @@ class index extends PureComponent {
   state = {
     url: '005.mp4',
     gpspos:[114,32],
-    addedEnt:[0],
+    addedEnt:[0,1],
   }
   constructor() {
     super()
@@ -30,7 +30,7 @@ class index extends PureComponent {
     this.drawArea = [] // 存储画多边形的顶点
     this.addModel = null // 布设三维模型
     this.addIcon = null //添加图标
-   
+    this.timerForgps = null
   }
 
 
@@ -52,7 +52,9 @@ class index extends PureComponent {
       // this.state.addedEnt.push(this.props.addIconMes.uid)
       console.log("addIconMes:",this.props.addIconMes)
       this.addIcon(this.props.addIconMes.uid, this.props.addIconMes.upos, this.props.addIconMes.utext, this.props.addIconMes.umodel)
-      setInterval(()=>this.moveEnt(),5000)
+      if (this.timerForgps == null){
+        this.timerForgps = setInterval(()=>this.moveEnt(),5000)
+      }
       //this.props.changeIconMes('0',[0,0],'0','0',false)      
     }
 
@@ -242,12 +244,12 @@ class index extends PureComponent {
 
       if (Cesium.defined(pick)) {
  
-        this.props.changevideourl(pick.id.id + '.mp4')
-        this.props.changetexturl(parseInt(pick.id.id))
-        this.props.changeimageurl(pick.id.id)
-        //如果点击的实体具有摄像头
-        var nowid = parseInt(pick.id.id)
-        this.props.changevideourl2(imgurls[nowid][0], imgurls[nowid][1])     
+        // this.props.changevideourl(pick.id.id + '.mp4')
+        // this.props.changetexturl(parseInt(pick.id.id))
+        // this.props.changeimageurl(pick.id.id)
+        // //如果点击的实体具有摄像头
+        // var nowid = parseInt(pick.id.id)
+        // this.props.changevideourl2(imgurls[nowid][0], imgurls[nowid][1])     
       }
 
       if (Cesium.defined(position)) {
@@ -361,19 +363,42 @@ class index extends PureComponent {
       //根据实体uid实时获取实体的gps位置，当实体创建时就自动运行
       // console.log("uid",uid)
 
-      for(var i=0, len=this.state.addedEnt.length; i<len; i++){
-        var uid = this.state.addedEnt[i]
-        axios.get(gpsurls[uid]).then(response =>{
-          var tent = viewer.entities.getById(uid)
-          if(tent == null){
-            console.log("未找到实体", uid);
+      for(var i=0, len=this.props.addedEnt.length; i<len; i++){
+        var uidd = this.props.addedEnt[i];
+        var eidd = parseInt(uidd)+1;
+        console.log(uidd);
+        console.log(eidd);
+        var csurl = this.props.csapi + "/geteidnowpos?eid=" + eidd;
+        axios.get(csurl).then(response =>{
+          var eid = response.data.eid
+          var uid = (parseInt(eid) -1) + "";
+          console.log("当前实体：", uid,"  坐标：",response.data)
+          if (viewer.entities.getById(uid) != null){
+            var tent = viewer.entities.getById(uid)
+            tent.position = Cesium.Cartesian3.fromDegrees(parseFloat(response.data.lon) , parseFloat(response.data.lat), parseFloat(response.data.height))  
           }
-          console.log("当前实体：",uid,"  坐标：",response.data)
-          tent.position = Cesium.Cartesian3.fromDegrees(response.data.lon,response.data.lat,32.0)          
+
         })
         // console.log("当前实体：",uid,"  坐标：",testpos[uid])
         // tent.position = Cesium.Cartesian3.fromDegrees(testpos[uid][0],testpos[uid][1],15.0)
       }
+
+      
+        // var ip = this.props.ips[uid];        
+        // var url = "http://"+ip+":8000";
+        // axios.get(url).then(response =>{
+        //   var rurl = response.config.url;
+        //   var rip = rurl.substring(7).split(":")[0];
+        //   var ruid = this.props.ips.indexOf(rip);
+        //   console.log("当前实体：",ruid,"  坐标：",response.data)
+        //   var tent = viewer.entities.getById(ruid)
+        //   if(tent == null){
+        //     console.log("未找到实体", ruid);
+        //   }         
+        //   tent.position = Cesium.Cartesian3.fromDegrees(response.data.longitude, response.data.latitude, response.data.altitude)          
+        // })
+
+
       // axios.get(gpsurls[uid]).then(response =>{
       //   console.log("当前实体：",uid,"  坐标：",response.data)
       //   tent.position = Cesium.Cartesian3.fromDegrees(response.data.lon,response.data.lat,15.0)

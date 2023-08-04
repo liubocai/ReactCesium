@@ -1,16 +1,16 @@
-import React, { Component, useReducer, useRef } from 'react'
-import { AppPageStyle, AppPageContent } from '../AppStyle'
-import { Globalstyle } from "../global.js"
+import React, { Component } from 'react'
+import { AppPageStyle, AppPageContent } from './AppStyle'
+import { Globalstyle } from "./global.js"
 
-import TopPart from '../components/TopPart/index'
-import LeftPart from '../components/LeftPart/index'
-import CenterPart from '../components/CenterPart/index'
-import RightPart from '../components/RightPart/index'
-// import PlayPart from './components/PlayPart/index'
-
-import '../assets/icon/iconfont.css'
-class Home extends Component {
+import TopPart from '../../components/TopPart/index'
+import LeftPart from '../../components/LeftPart/index'
+import CenterPart from '../../components/CenterPart/index'
+import RightPart from '../../components/RightPart/index'
+import '../../assets/icon/iconfont.css'
+class App extends Component {
   state = {
+    addedEnt:[],
+    ips: [],
     csapi: 'http://localhost:8088',
     selectAera: false,
     showUavTrack: false,
@@ -45,16 +45,21 @@ class Home extends Component {
     },
     video1:{
       url:'应急人员.png',
-      text:''
+      text:'设备名称'
     },
     video2:{
       url:'应急人员.png',
-      text:''
+      text:'设备名称'
     },
     video3:{
       url:'应急人员.png',
-      text:''
+      text:'设备名称'
     },
+  }
+  changeAddedEnt=(array)=>{
+    this.setState({
+      addedEnt:array
+    })
   }
   //for right page
   changerrtcplayfunc=(ifrun, vdomid, url,text)=>{
@@ -169,6 +174,11 @@ class Home extends Component {
   addIcon = (id, pos, text, model) =>{
     this.changeIconMes(id, pos, text, model, true)
   }
+  changeIps=(ips) =>{
+    this.setState({
+      ips:ips,
+    })
+  }
   render () {
     return (
       <AppPageStyle>
@@ -182,7 +192,7 @@ class Home extends Component {
             changeUavTrack={this.changeUavTrack}
             changeUAVModel={this.changeUAVModel}
             addIcon={this.addIcon}
-            changeIconMes={this.changeIconMes}
+            changeIconMes={this.changeIconMes}  
             changevidu1={this.changevidu1}
             changevidu2={this.changevidu2}
             changevidu3={this.changevidu3}
@@ -190,7 +200,8 @@ class Home extends Component {
             showUavTrack={this.state.showUavTrack}
             csapi={this.state.csapi}
             changerrtcplayfunc={this.changerrtcplayfunc}
-            
+            changeIps = {this.changeIps}
+            changeAddedEnt={this.changeAddedEnt}
           />
 
           <CenterPart
@@ -210,6 +221,8 @@ class Home extends Component {
             uavmodel={this.state.uavmodel}
             addIconMes={this.state.addIconMes}
             csapi={this.state.csapi}
+            ips={this.state.ips}
+            addedEnt={this.state.addedEnt}
           />
 
           <RightPart
@@ -235,4 +248,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default App

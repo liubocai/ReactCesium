@@ -74,7 +74,8 @@ class index extends PureComponent {
           </div>
         </RightTopBox> */}
         <div>
-          <button>更多</button>
+          {/* <button>更多</button> */}
+          <a href='moreplayer.html'>更多</a>
         </div>
         <RightCenterBox>
           <BorderBox1 className='right-center-borderBox1'>
