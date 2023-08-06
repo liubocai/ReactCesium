@@ -54,11 +54,11 @@ class index extends PureComponent {
       console.log("addIconMes:",this.props.addIconMes)
       this.addIcon(this.props.addIconMes.uid, this.props.addIconMes.upos, this.props.addIconMes.utext, this.props.addIconMes.umodel)
       if (this.timerForgps == null){
-        this.timerForgps = setInterval(()=>this.moveEnt(),5000)
+        this.timerForgps = setInterval(()=>this.moveEnt(),1000)
       }
-      if(this.timerForvid == null){
-        this.timerForvid = setInterval(()=>this.saveVid(), 5*60*1000) //每5分钟录一次
-      }
+      // if(this.timerForvid == null){
+      //   this.timerForvid = setInterval(()=>this.saveVid(), 5*60*1000) //每5分钟录一次
+      // }
       //this.props.changeIconMes('0',[0,0],'0','0',false)      
     }
 
@@ -341,7 +341,7 @@ class index extends PureComponent {
       var pitch = 0
       var roll = 0
       var hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll)
-      var positions = Cesium.Cartesian3.fromDegrees(pos[0], pos[1], 13.0)
+      var positions = Cesium.Cartesian3.fromDegrees(pos[0], pos[1], 15.0)
       var orientation = Cesium.Transforms.headingPitchRollQuaternion(positions, hpr)
       viewer.entities.add({
         name: 'anyway',
@@ -354,11 +354,16 @@ class index extends PureComponent {
           font: '10pt sans-serif',
           scale: 2.0,
           fillcolor: Cesium.Color.BLUE,
-          show: true
+          show: true,
+          verticalOrigin: Cesium.VerticalOrigin.BOTTOM ,
+          pixelOffset: new Cesium.Cartesian2(0.0, 1.0),
         },
         model: {
           uri: url,
           scale: 0.001,
+          color: Cesium.Color.RED,
+          colorBlendMode : Cesium.ColorBlendMode.HIGHLIGHT,
+          // heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,          
         }
       })
     }
@@ -377,16 +382,35 @@ class index extends PureComponent {
           var eid = response.data.eid
           var uid = (parseInt(eid) -1) + "";
           console.log("当前实体：", uid,"  坐标：",response.data)
+          var tpos = Cesium.Cartesian3.fromDegrees(parseFloat(response.data.lon) , parseFloat(response.data.lat), parseFloat(response.data.height));
+          if(viewer.scene.clampToHeight(tpos) != null){
+            tpos =  viewer.scene.clampToHeight(tpos);
+          }        
+          // var tilespos = viewer.scene.clampToHeight(tpos);
+          // if(tilespos == null ){
+          //   tilespos = tpos;
+          // }
+          // console.log("tilepos", tilespos);
+          console.log("tpos", tpos);
           if (viewer.entities.getById(uid) != null){
             var tent = viewer.entities.getById(uid)
-            tent.position = Cesium.Cartesian3.fromDegrees(parseFloat(response.data.lon) , parseFloat(response.data.lat), parseFloat(response.data.height))  
+            tent.position = tpos;
           }
-
         })
-        // console.log("当前实体：",uid,"  坐标：",testpos[uid])
-        // tent.position = Cesium.Cartesian3.fromDegrees(testpos[uid][0],testpos[uid][1],15.0)
-      }
-
+      }        
+      // console.log("当前实体：",uid,"  坐标：",testpos[uid])
+      // tent.position = Cesium.Cartesian3.fromDegrees(testpos[uid][0],testpos[uid][1],15.0)
+// var tpos = Cesium.Cartesian3.fromDegrees(114.35557895427286, 30.52768214817075, 120.0);
+          // let promise = viewer.scene.clampToHeightMostDetailed([tpos]);
+          // console.log("promise",promise)
+          // promise.then(updatedCartesians => {
+          //   if (viewer.entities.getById(uid) != null){
+          //     var tent = viewer.entities.getById(uid)
+          //     tent.position = updatedCartesians[0];
+          //     console.log("updatedCartesians",updatedCartesians)
+          //     // tent.position = Cesium.Cartesian3.fromDegrees(parseFloat(response.data.lon) , parseFloat(response.data.lat), 40.0)  
+          //   }
+          // })
       
         // var ip = this.props.ips[uid];        
         // var url = "http://"+ip+":8000";

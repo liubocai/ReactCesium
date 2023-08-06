@@ -33,12 +33,15 @@ class ChildComponent extends React.Component { // 静态组件不会在父组件
   showVideo=(url,text)=>{ //在右边播放视频
     if(videoindex == 1){ 
       this.props.changerrtcplayfunc(true,'rtc_media_player1',url,text)
+      this.props.changevidu1('',text)
       videoindex = 2;
     }else if(videoindex == 2){
       this.props.changerrtcplayfunc(true,'rtc_media_player2',url,text)
+      this.props.changevidu2('',text)
       videoindex = 3
     }else{
       this.props.changerrtcplayfunc(true,'rtc_media_player3',url,text)
+      this.props.changevidu3('',text)
       videoindex = 1
     }
   }
